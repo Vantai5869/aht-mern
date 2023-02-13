@@ -40,14 +40,22 @@ app.use((req, res) => {
   });
 });
 
-mongoose.connect(process.env.MONGO_URL)
-  .then(() => {
-    const PORT = process.env.PORT || 8000;
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.log(error);
+mongoose.set("strictQuery", false);
+
+mongoose.connect(
+  process.env.MONGO_URL,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  (err) => {
+    if (err) throw err;
+    console.log("Connected to mongodb");
+  }
+)
+
+  const PORT = process.env.PORT || 8000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
   });
 
